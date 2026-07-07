@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "flight-card": "/components/flight-card/flight-card",
+    "countdown": "/components/countdown/countdown",
+    "weather-panel": "/components/weather-panel/weather-panel",
+    "day-card": "/components/day-card/day-card",
+    "tip-card": "/components/tip-card/tip-card"
+  },
+  "navigationBarTitleText": "旅行详情",
+  "enablePullDownRefresh": false
+}

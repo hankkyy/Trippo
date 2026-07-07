@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "trip-card": "/components/trip-card/trip-card"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarTitleText": "Trippo · 旅行计划"
+}

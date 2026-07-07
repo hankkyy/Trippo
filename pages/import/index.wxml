@@ -1,0 +1,204 @@
+<!-- ═══════════════════════════════════════════════
+  从帖子导入页 — 粘贴攻略 → 内容整理 → 预览 → 保存
+  ═══════════════════════════════════════════════ -->
+
+<view class="page-import">
+
+  <!-- ═══ 输入 ═══ -->
+  <view wx:if="{{status === 'input'}}" class="input-section">
+
+    <view class="import-hero">
+      <text class="ih-title">从帖子导入</text>
+      <text class="ih-desc">
+        粘贴攻略链接或文字，自动整理成旅行计划
+      </text>
+      <text class="ih-quota">今日剩余：{{remaining !== null ? remaining : 10}}/{{dailyLimit}} 次</text>
+    </view>
+
+    <!-- ═══ 剪贴板检测 ═══ -->
+    <view wx:if="{{clipboardUrl && status === 'input'}}" class="clipboard-card">
+      <view class="clip-header">
+        <text class="clip-emoji">📋</text>
+        <text class="clip-title">检测到攻略链接</text>
+        <text class="clip-dismiss" bindtap="onClearClipboard">✕</text>
+      </view>
+      <text class="clip-url">{{clipboardUrl}}</text>
+      <button class="btn-primary clip-btn" bindtap="onQuickImport">
+        开始整理
+      </button>
+    </view>
+
+    <view class="mode-tabs">
+      <view class="mode-tab {{inputMode === 'urls' ? 'active' : ''}}" bindtap="onSwitchMode" data-mode="urls">
+        🔗 链接导入
+      </view>
+      <view class="mode-tab {{inputMode === 'text' ? 'active' : ''}}" bindtap="onSwitchMode" data-mode="text">
+        📝 文字导入
+      </view>
+    </view>
+
+    <!-- 链接模式 -->
+    <view wx:if="{{inputMode === 'urls'}}" class="input-area">
+      <text class="input-label">攻略链接（一行一个，最多3个）</text>
+      <textarea
+        class="url-input"
+        value="{{urls}}"
+        placeholder="https://www.xiaohongshu.com/explore/xxx&#10;https://mp.weixin.qq.com/s/xxx"
+        bindinput="onUrlsInput"
+        auto-height maxlength="5000"
+      />
+      <view class="input-hint">
+        <text>支持公开网页链接，登录页可能抓取失败</text>
+      </view>
+    </view>
+
+    <!-- 文字模式 -->
+    <view wx:else class="input-area">
+      <text class="input-label">📝 粘贴攻略文字</text>
+      <textarea
+        class="text-input"
+        value="{{rawText}}"
+        placeholder="把你看到的好攻略文字直接粘贴到这里…&#10;&#10;例如：&#10;Day1: 上午浅草寺免费参拜，求签。中午一兰拉面1000日元。下午晴空塔天望甲板2100日元。&#10;Day2: 涩谷十字路口 → 原宿竹下通可丽饼 → 新宿烧鸟"
+        bindinput="onTextInput"
+        auto-height maxlength="20000"
+      />
+      <view class="input-hint">
+        <text>内容越详细效果越好，可同时粘贴多篇攻略</text>
+      </view>
+    </view>
+
+    <button class="btn-parse" bindtap="onStartParse">
+      开始整理
+    </button>
+  </view>
+
+  <!-- ═══ 解析中 ═══ -->
+  <view wx:elif="{{status === 'parsing' || status === 'saving'}}" class="parse-section">
+    <view class="parse-animation">
+      <view class="pa-dots">
+        <view class="pa-dot"></view><view class="pa-dot"></view><view class="pa-dot"></view>
+      </view>
+    </view>
+    <text class="pa-title">{{statusMsg}}</text>
+    <text class="pa-sub">{{status === 'parsing' ? '正在提取行程、餐厅、贴士…约10-20秒' : '正在保存…'}}</text>
+  </view>
+
+  <!-- ═══ 错误 ═══ -->
+  <view wx:elif="{{status === 'error'}}" class="error-section">
+    <text class="es-title">解析失败</text>
+    <text class="es-desc">{{errorMsg}}</text>
+    <view class="es-actions">
+      <button class="btn-secondary" bindtap="onRetry">返回修改</button>
+      <button class="btn-primary" style="margin-left:16rpx" bindtap="onStartParse">重试</button>
+    </view>
+  </view>
+
+  <!-- ═══ 预览 ═══ -->
+  <view wx:elif="{{status === 'preview' && tripData}}" class="preview-section">
+    <view class="preview-header">
+      <text class="ph-title">解析完成</text>
+      <text class="ph-stats">{{getStats()}}</text>
+      <text wx:if="{{remaining !== null}}" class="ph-quota">今日剩余 {{remaining}}/{{dailyLimit}} 次</text>
+    </view>
+
+    <view class="preview-card">
+      <view class="pc-title">📋 基本信息</view>
+      <view class="pc-row">
+        <text class="pc-label">标题</text>
+        <text class="pc-value">{{tripData.title || '未命名旅行'}}</text>
+      </view>
+      <view class="pc-row">
+        <text class="pc-label">目的地</text>
+        <text class="pc-value">{{tripData.meta.destination || tripData.destination || '--'}}</text>
+      </view>
+      <view class="pc-row">
+        <text class="pc-label">天数</text>
+        <text class="pc-value">{{tripData.itinerary.length}} 天</text>
+      </view>
+    </view>
+
+    <view wx:if="{{tripData.itinerary && tripData.itinerary.length > 0}}" class="preview-card">
+      <view class="pc-title" bindtap="onTogglePreview">
+        📅 行程预览（{{tripData.itinerary.length}}天）
+        <text class="pc-toggle">{{showFullPreview ? '▲ 收起' : '▼ 展开'}}</text>
+      </view>
+      <block wx:if="{{showFullPreview}}">
+        <view wx:for="{{tripData.itinerary}}" wx:key="day" class="pv-day">
+          <view class="pv-day-header">Day {{item.day}} — {{item.theme}}</view>
+          <view wx:for="{{item.activities}}" wx:key="title" wx:for-item="act" class="pv-act">
+            <text class="pv-act-time">{{act.time || '--:--'}}</text>
+            <view class="pv-act-info">
+              <text class="pv-act-title">{{act.title}}</text>
+              <text wx:if="{{act.subtitle}}" class="pv-act-sub">{{act.subtitle}}</text>
+              <text wx:if="{{act.detail}}" class="pv-act-detail">{{act.detail}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+      <view wx:else class="pc-hint">点击展开查看详情</view>
+    </view>
+
+    <view wx:if="{{tripData.restaurants && tripData.restaurants.length > 0}}" class="preview-card">
+      <view class="pc-title">🍜 推荐餐厅（{{tripData.restaurants.length}}家）</view>
+      <view wx:for="{{tripData.restaurants.slice(0, 4)}}" wx:key="name" class="pv-resto">
+        <text>{{item.emoji || '🍽️'}} {{item.name}}</text>
+        <text class="pv-resto-meta">{{item.price || ''}}</text>
+      </view>
+      <text wx:if="{{tripData.restaurants.length > 4}}" class="pc-hint">…还有 {{tripData.restaurants.length - 4}} 家</text>
+    </view>
+
+    <view wx:if="{{tripData.tips && tripData.tips.length > 0}}" class="preview-card">
+      <view class="pc-title" bindtap="onToggleTips">
+        💡 旅行贴士（{{tripData.tips.length}}条）
+        <text class="pc-toggle">{{showTips ? '▲ 收起' : '▼ 展开'}}</text>
+      </view>
+      <block wx:if="{{showTips}}">
+        <view wx:for="{{tripData.tips}}" wx:key="title" class="pv-tip-full">
+          <text class="pv-tip-title" style="color:{{item.color}}">{{item.title}}</text>
+          <text wx:for="{{item.body}}" wx:key="*this" wx:for-item="b" class="pv-tip-body">{{b}}</text>
+        </view>
+      </block>
+      <view wx:else class="pc-hint">点击展开查看详情</view>
+    </view>
+
+    <view wx:if="{{tripData.phrases && tripData.phrases.length > 0}}" class="preview-card">
+      <view class="pc-title" bindtap="onTogglePhrases">
+        🗣️ 常用语（{{tripData.phrases.length}}句）
+        <text class="pc-toggle">{{showPhrases ? '▲ 收起' : '▼ 展开'}}</text>
+      </view>
+      <block wx:if="{{showPhrases}}">
+        <view wx:for="{{tripData.phrases}}" wx:key="translation" class="pv-phrase">
+          <text class="pv-phrase-local">{{item.localLanguage}}</text>
+          <text class="pv-phrase-pron">{{item.pronunciation}}</text>
+          <text class="pv-phrase-zh">{{item.translation}}</text>
+        </view>
+      </block>
+      <view wx:else class="pc-hint">点击展开查看详情</view>
+    </view>
+
+    <view wx:if="{{tripData.souvenirs && tripData.souvenirs.length > 0}}" class="preview-card">
+      <view class="pc-title" bindtap="onToggleSouvenirs">
+        🛍️ 伴手礼（{{tripData.souvenirs.length}}个）
+        <text class="pc-toggle">{{showSouvenirs ? '▲ 收起' : '▼ 展开'}}</text>
+      </view>
+      <block wx:if="{{showSouvenirs}}">
+        <view wx:for="{{tripData.souvenirs}}" wx:key="name" class="pv-souv">
+          <text class="pv-souv-emoji">{{item.emoji || '🎁'}}</text>
+          <view class="pv-souv-info">
+            <text class="pv-souv-name">{{item.name}}</text>
+            <text class="pv-souv-meta">{{item.where}} · {{item.price}}</text>
+            <text wx:if="{{item.description}}" class="pv-souv-desc">{{item.description}}</text>
+          </view>
+        </view>
+      </block>
+      <view wx:else class="pc-hint">点击展开查看详情</view>
+    </view>
+
+    <view class="preview-bottom safe-bottom">
+      <button class="btn-secondary" style="flex:1" bindtap="onBackToInput">↺ 重来</button>
+      <button class="btn-accent" style="flex:1" bindtap="onContinueAdd">＋ 继续添加</button>
+      <button class="btn-primary" style="flex:2" bindtap="onSave">💾 保存</button>
+    </view>
+  </view>
+
+</view>

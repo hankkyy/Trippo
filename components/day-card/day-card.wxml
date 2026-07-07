@@ -1,0 +1,44 @@
+<!-- ═══════════════════════════════════════════════
+  day-card 组件 — 每日行程折叠卡片
+  参照模板 day-preview 设计
+  点击展开/收起，当前日期高亮金色边框 + NOW 丝带
+  ═══════════════════════════════════════════════ -->
+
+<view
+  class="day-card {{isToday ? 'now-day' : ''}} {{expanded ? 'expanded' : ''}}"
+>
+
+  <!-- NOW 丝带角标 -->
+  <view wx:if="{{isToday}}" class="now-ribbon">NOW</view>
+
+  <!-- 彩色顶栏 -->
+  <view class="day-bar {{barClass}}" bindtap="onToggle">
+    <view class="day-num">{{dayData.day}}</view>
+    <view class="day-info">
+      <view class="day-date" wx:if="{{dayData.date}}">{{dayData.date}}</view>
+      <view class="day-theme">{{dayData.theme || '自由探索'}}</view>
+    </view>
+    <text class="day-toggle-icon">{{expanded ? '▲' : '▼'}}</text>
+  </view>
+
+  <!-- 折叠时的 peek 标签 -->
+  <view wx:if="{{!expanded}}" class="day-peek">
+    <text
+      wx:for="{{peekActivities}}"
+      wx:key="time"
+      class="day-peek-tag"
+    >{{item.title}}</text>
+  </view>
+  <view wx:if="{{!expanded}}" class="day-hint">👆 点击展开完整行程</view>
+
+  <!-- 展开后的活动列表 -->
+  <view wx:if="{{expanded}}" class="day-body">
+    <activity-row
+      wx:for="{{dayData.activities}}"
+      wx:key="time"
+      activity="{{item}}"
+      day="{{dayData.day}}"
+    />
+  </view>
+
+</view>

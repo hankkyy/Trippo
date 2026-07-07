@@ -1,0 +1,79 @@
+<!-- ═══════════════════════════════════════════════
+  weather-panel 组件 — 天气模块
+  当前天气 + 5日预报（横向滚动）+ 点击查看逐小时详情
+  ═══════════════════════════════════════════════ -->
+
+<view class="weather-row">
+
+  <!-- ═══ 加载中 ═══ -->
+  <view wx:if="{{loading}}" class="weather-loading">
+    <text>加载天气中…</text>
+  </view>
+
+  <!-- ═══ 加载失败 ═══ -->
+  <view wx:elif="{{error}}" class="weather-error">
+    <text class="we-icon">🌡️</text>
+    <text class="we-text">天气数据暂不可用</text>
+  </view>
+
+  <!-- ═══ 天气数据就绪 ═══ -->
+  <block wx:else>
+    <!-- 当前天气卡片 -->
+    <view class="weather-box" bindtap="onToggleDetail">
+      <text class="w-icon">{{current.icon}}</text>
+      <view class="w-main">
+        <view class="w-temp">{{current.temp}}°C</view>
+        <view class="w-desc">{{current.desc}}</view>
+      </view>
+      <view class="w-extra">
+        <view class="w-hum">💧 {{current.humidity}}%</view>
+        <view class="w-hint">点击看预报</view>
+      </view>
+    </view>
+
+    <!-- 5日预报（横向滚动） -->
+    <scroll-view
+      wx:if="{{showDaily}}"
+      class="weather-fc"
+      scroll-x
+      enable-flex
+      scroll-with-animation
+    >
+      <view
+        wx:for="{{daily}}"
+        wx:key="date"
+        class="fc-day {{item.isToday ? 'today' : ''}} {{selectedDate === item.date ? 'selected' : ''}}"
+        data-date="{{item.date}}"
+        bindtap="onSelectDay"
+      >
+        <view class="fc-dow">{{item.weekday}}</view>
+        <view class="fc-date">{{item.dateStr}}</view>
+        <text class="fc-icon">{{item.icon}}</text>
+        <view class="fc-temp">{{item.tempMax}}°/{{item.tempMin}}°</view>
+        <view class="fc-desc">{{item.desc}}</view>
+        <view class="fc-hint">👆 看分时</view>
+      </view>
+    </scroll-view>
+
+    <!-- 逐小时详情面板 -->
+    <scroll-view
+      wx:if="{{hourly.length > 0}}"
+      class="hourly-panel"
+      scroll-x
+      enable-flex
+    >
+      <view
+        wx:for="{{hourly}}"
+        wx:key="time"
+        class="hr-card {{item.isNow ? 'now-hr' : ''}}"
+      >
+        <view class="hr-time">{{item.time}}</view>
+        <text class="hr-icon">{{item.icon}}</text>
+        <view class="hr-temp">{{item.temp}}°</view>
+        <view class="hr-desc">{{item.desc}}</view>
+        <view wx:if="{{item.precip > 0}}" class="hr-rain">💧{{item.precip}}%</view>
+      </view>
+    </scroll-view>
+  </block>
+
+</view>

@@ -1,0 +1,92 @@
+<!-- ═══════════════════════════════════════════════
+  countdown 组件 — SVG 环形倒计时
+  四个独立圆环：天（红）/时（黄）/分（青）/秒（紫）
+  已结束后显示「已结束 X 天」
+  ═══════════════════════════════════════════════ -->
+
+<view class="cdown">
+  <!-- 旅行已结束 -->
+  <view wx:if="{{isPast}}" class="cd-past">
+    <view class="cd-past-dot"></view>
+    <text class="cd-past-text">已结束 {{daysPast}} 天</text>
+  </view>
+
+  <!-- ═══ 倒计时中 ═══ -->
+  <block wx:else>
+    <view class="cd-rings">
+      <!-- 天 -->
+      <view class="cd-ring-item">
+        <svg viewBox="0 0 100 100">
+          <circle class="cd-bg" cx="50" cy="50" r="44"/>
+          <circle
+            class="cd-fg days"
+            cx="50" cy="50" r="44"
+            stroke-dasharray="{{circ}}"
+            stroke-dashoffset="{{dOffset}}"
+          />
+        </svg>
+        <view class="cd-ring-label">
+          <view class="cd-val">{{d}}</view>
+          <view class="cd-lbl">天</view>
+        </view>
+      </view>
+
+      <text class="cd-colon">:</text>
+
+      <!-- 时 -->
+      <view class="cd-ring-item">
+        <svg viewBox="0 0 100 100">
+          <circle class="cd-bg" cx="50" cy="50" r="44"/>
+          <circle
+            class="cd-fg hours"
+            cx="50" cy="50" r="44"
+            stroke-dasharray="{{circ}}"
+            stroke-dashoffset="{{hOffset}}"
+          />
+        </svg>
+        <view class="cd-ring-label">
+          <view class="cd-val">{{h}}</view>
+          <view class="cd-lbl">时</view>
+        </view>
+      </view>
+
+      <text class="cd-colon">:</text>
+
+      <!-- 分 -->
+      <view class="cd-ring-item">
+        <svg viewBox="0 0 100 100">
+          <circle class="cd-bg" cx="50" cy="50" r="44"/>
+          <circle
+            class="cd-fg mins"
+            cx="50" cy="50" r="44"
+            stroke-dasharray="{{circ}}"
+            stroke-dashoffset="{{mOffset}}"
+          />
+        </svg>
+        <view class="cd-ring-label">
+          <view class="cd-val">{{m}}</view>
+          <view class="cd-lbl">分</view>
+        </view>
+      </view>
+
+      <text class="cd-colon">:</text>
+
+      <!-- 秒 -->
+      <view class="cd-ring-item">
+        <svg viewBox="0 0 100 100">
+          <circle class="cd-bg" cx="50" cy="50" r="44"/>
+          <circle
+            class="cd-fg secs"
+            cx="50" cy="50" r="44"
+            stroke-dasharray="{{circ}}"
+            stroke-dashoffset="{{sOffset}}"
+          />
+        </svg>
+        <view class="cd-ring-label">
+          <view class="cd-val">{{s}}</view>
+          <view class="cd-lbl">秒</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

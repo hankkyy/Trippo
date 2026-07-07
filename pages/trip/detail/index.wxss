@@ -1,0 +1,142 @@
+/* 详情页 — 轻透玻璃感 */
+
+.page-detail {
+  min-height: 100vh;
+  background: #FFFFFF;
+}
+
+.hero {
+  color: #FFF;
+  padding: 96rpx 48rpx 64rpx;
+  text-align: center; position: relative; overflow: hidden;
+  background: #5A7860; min-height: 540rpx;
+}
+.hero-swiper { position: absolute; inset: 0; z-index: 0; }
+.hero-bg { width: 100%; height: 100%; opacity: 0.5; }
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(50,55,40,0.2) 0%, rgba(25,30,22,0.5) 100%);
+}
+.hero-glow {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(232,168,124,0.15) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 20%, rgba(109,181,138,0.1) 0%, transparent 45%);
+}
+.hero-content { position: relative; z-index: 2; max-width: 750rpx; margin: 0 auto; }
+.hero-badge {
+  display: inline-block;
+  border: 1rpx solid rgba(255,255,255,0.2);
+  border-radius: 60rpx; padding: 10rpx 36rpx;
+  font-size: 22rpx; letter-spacing: 6rpx;
+  margin-bottom: 36rpx; background: rgba(0,0,0,0.08); opacity: 0.8;
+}
+.hero-title { display: block; font-size: 64rpx; font-weight: 800; letter-spacing: 4rpx; line-height: 1.15; margin-bottom: 18rpx; }
+.hero-sub { font-size: 26rpx; opacity: 0.6; font-weight: 400; margin-bottom: 40rpx; }
+.hero-flights { margin-top: 36rpx; }
+
+.page-body { max-width: 750rpx; margin: 0 auto; padding: 0 40rpx 220rpx; }
+
+/* 统计 */
+.top-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16rpx; margin-top: 44rpx; }
+.top-card {
+  background: var(--card-glass);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 28rpx; padding: 32rpx 20rpx; text-align: center;
+  border: 1rpx solid rgba(255,255,255,0.6);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease-out;
+}
+.top-card:active { transform: translateY(-2rpx); box-shadow: var(--shadow-md); }
+.tc-ring { display: inline-flex; align-items: baseline; justify-content: center; gap: 4rpx; margin-bottom: 12rpx; }
+.tc-value { font-size: 48rpx; font-weight: 800; color: var(--text); line-height: 1; }
+.tc-unit { font-size: 24rpx; color: var(--muted); font-weight: 600; }
+.tc-label { font-size: 22rpx; color: var(--muted); letter-spacing: 3rpx; font-weight: 500; }
+
+.section { padding: 32rpx 0; }
+
+/* 快捷导航 */
+.quick-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14rpx; }
+.qn-item {
+  display: flex; flex-direction: column; align-items: center; gap: 14rpx;
+  background: var(--card-glass);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 28rpx; padding: 32rpx 16rpx;
+  border: 1rpx solid rgba(255,255,255,0.6);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease-out;
+}
+.qn-item:active { transform: translateY(-2rpx); box-shadow: var(--shadow-md); }
+.qn-icon-wrap { width: 52rpx; height: 52rpx; border-radius: 18rpx; background: rgba(139,184,154,0.08); display: flex; align-items: center; justify-content: center; }
+.qn-icon-line { width: 22rpx; height: 22rpx; border: 3rpx solid var(--green); border-radius: 6rpx; }
+.qn-icon-line.budget { border-radius: 50%; border-color: var(--coral); }
+.qn-icon-line.checklist { border-radius: 0; border-top: none; border-left: none; border-right: none; height: 5rpx; width: 26rpx; }
+.qn-icon-line.map { border-radius: 50%; border-style: dashed; }
+.qn-label { font-size: 22rpx; color: var(--text-secondary); font-weight: 500; letter-spacing: 1rpx; }
+
+/* 酒店 */
+.hotel-card {
+  display: flex; align-items: flex-start; gap: 22rpx;
+  padding: 36rpx; background: var(--card-glass);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 28rpx; border: 1rpx solid rgba(255,255,255,0.6);
+  box-shadow: var(--shadow-card);
+}
+.hc-icon { width: 60rpx; height: 60rpx; border-radius: 20rpx; background: rgba(212,171,154,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hc-icon-inner {
+  width: 30rpx; height: 22rpx; border: 3rpx solid var(--coral);
+  border-radius: 4rpx 4rpx 0 0; border-bottom: none; position: relative;
+}
+.hc-icon-inner::after {
+  content: ''; position: absolute; bottom: -10rpx; left: 50%;
+  width: 18rpx; height: 10rpx; border: 3rpx solid var(--coral);
+  border-top: none; border-radius: 0 0 4rpx 4rpx; transform: translateX(-50%);
+}
+.hc-info { flex: 1; min-width: 0; }
+.hc-name { display: block; font-size: 32rpx; font-weight: 700; color: var(--text); }
+.hc-addr { display: block; font-size: 24rpx; color: var(--muted); margin-top: 8rpx; }
+.hc-tags { display: flex; gap: 8rpx; margin-top: 12rpx; }
+
+/* 餐厅 */
+.resto-preview {
+  display: flex; gap: 22rpx; align-items: center;
+  padding: 32rpx; background: var(--card-glass);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 28rpx; margin-bottom: 14rpx;
+  border: 1rpx solid rgba(255,255,255,0.6);
+  box-shadow: var(--shadow-card);
+}
+.rp-icon { width: 52rpx; height: 52rpx; border-radius: 18rpx; background: rgba(196,130,130,0.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.rp-icon-dot { width: 20rpx; height: 20rpx; border-radius: 50%; background: var(--coral); }
+.rp-info { flex: 1; min-width: 0; }
+.rp-name { font-size: 28rpx; font-weight: 700; color: var(--text); }
+.rp-addr { font-size: 24rpx; color: var(--muted); margin-top: 8rpx; }
+.rp-tags { display: flex; gap: 8rpx; margin-top: 10rpx; }
+
+.tips-grid { display: flex; flex-direction: column; gap: 18rpx; }
+.phrase-table-wrap { background: var(--card-glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 28rpx; overflow: hidden; border: 1rpx solid rgba(255,255,255,0.6); box-shadow: var(--shadow-card); }
+.phrase-row { display: flex; padding: 24rpx 32rpx; border-bottom: 1rpx solid rgba(0,0,0,0.04); }
+.phrase-row:last-child { border-bottom: none; }
+.pr-zh { flex: 1; font-size: 28rpx; font-weight: 600; color: var(--text); }
+.pr-local { flex: 1; font-size: 28rpx; color: var(--text); text-align: center; }
+.pr-pron { flex: 1; font-size: 24rpx; color: var(--muted); text-align: right; font-style: italic; }
+
+.souv-grid { display: flex; flex-wrap: wrap; gap: 18rpx; }
+.souv-card {
+  display: flex; align-items: center; gap: 18rpx;
+  flex: 1; min-width: 280rpx; padding: 32rpx;
+  background: var(--card-glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 28rpx; border: 1rpx solid rgba(255,255,255,0.6);
+  box-shadow: var(--shadow-card);
+}
+.sc-icon { width: 48rpx; height: 48rpx; border-radius: 14rpx; background: #E8C860; flex-shrink: 0; }
+.sc-info { flex: 1; min-width: 0; }
+.sc-name { display: block; font-size: 26rpx; font-weight: 700; color: var(--text); }
+.sc-meta { display: block; font-size: 22rpx; color: var(--muted); margin-top: 6rpx; }
+.see-all { font-size: 24rpx; color: var(--green); font-weight: 600; }
+
+/* 底部 */
+.bb-btn { flex: 1; padding: 26rpx 0; border-radius: 60rpx; font-size: 24rpx; font-weight: 700; border: none; text-align: center; letter-spacing: 1rpx; }
+.bb-edit { background: #6DB58A; color: #FFF; box-shadow: 0 4rpx 16rpx rgba(109,181,138,0.2); }
+.bb-share { background: #E8A87C; color: #FFF; box-shadow: 0 4rpx 16rpx rgba(232,168,124,0.2); }
+.bb-public { background: var(--card-glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: var(--text); border: 1rpx solid rgba(255,255,255,0.6); }

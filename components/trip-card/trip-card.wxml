@@ -1,0 +1,69 @@
+<!-- ═══════════════════════════════════════════════
+  trip-card 组件
+  首页旅行预览卡片：封面图 + 渐变遮罩 + 标题 + 日期 + 倒计时
+  ═══════════════════════════════════════════════ -->
+
+<view
+  class="trip-card"
+  bindtap="onTap"
+  bindlongpress="onLongPress"
+  hover-class="trip-card-hover"
+>
+
+  <!-- 封面图 -->
+  <image
+    class="trip-card-cover"
+    src="{{trip.coverImage || '/images/cover-default.jpg'}}"
+    mode="aspectFill"
+    lazy-load
+  />
+
+  <!-- 渐变遮罩 -->
+  <view class="trip-card-overlay"></view>
+
+  <!-- 底部渐变（让文字更清晰） -->
+  <view class="trip-card-gradient"></view>
+
+  <!-- 内容层 -->
+  <view class="trip-card-content">
+
+    <!-- 目的地标签 -->
+    <view wx:if="{{trip.meta && trip.meta.destination}}" class="trip-dest-tag">
+      <text>{{trip.meta.destination}}</text>
+    </view>
+
+    <!-- 标题 -->
+    <view class="trip-card-title">{{trip.title || '未命名旅行'}}</view>
+
+    <!-- 日期 & 出行人 -->
+    <view class="trip-card-meta">
+      <text wx:if="{{trip.dateRange}}" class="trip-meta-item">
+{{trip.dateRange}}
+      </text>
+      <text wx:if="{{trip.meta && trip.meta.travelers}}" class="trip-meta-item">
+{{trip.meta.travelers}}
+      </text>
+    </view>
+
+    <!-- 首日行程预览 -->
+    <view wx:if="{{trip.previewActivities.length > 0}}" class="trip-card-preview">
+      <text
+        wx:for="{{trip.previewActivities}}"
+        wx:key="time"
+        wx:for-item="act"
+        class="trip-preview-tag"
+      >{{act.title}}</text>
+    </view>
+
+  </view>
+
+  <!-- 倒计时角标 -->
+  <view class="trip-countdown-badge {{trip.countdown.isPast ? 'is-past' : ''}}">
+    <text wx:if="{{trip.countdown.isPast}}">{{trip.countdown.text}}</text>
+    <block wx:else>
+      <text class="cd-num">{{trip.countdown.days}}</text>
+      <text class="cd-unit">天</text>
+    </block>
+  </view>
+
+</view>

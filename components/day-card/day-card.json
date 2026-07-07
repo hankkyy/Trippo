@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "activity-row": "/components/activity-row/activity-row"
+  }
+}

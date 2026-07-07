@@ -1,0 +1,9 @@
+{
+  "name": "proxyWeather",
+  "version": "1.0.0",
+  "description": "Open-Meteo weather API proxy",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

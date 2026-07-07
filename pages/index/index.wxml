@@ -1,0 +1,59 @@
+<!-- Trippo 首页 -->
+<view class="page-index">
+
+  <view class="header">
+    <view class="logo-mark"></view>
+    <view class="header-text">
+      <text class="header-title">Trippo</text>
+      <text class="header-sub">旅行计划，不止于攻略</text>
+    </view>
+  </view>
+
+  <view class="action-bar">
+    <button class="ab-new" bindtap="onCreateTrip">
+      <text>+ 新建旅行计划</text>
+    </button>
+    <button class="ab-import" bindtap="onAIImport">
+      <text>智能导入</text>
+    </button>
+  </view>
+
+  <!-- 加载骨架 -->
+  <view wx:if="{{loading}}" class="skeleton-list">
+    <view class="sk-card" wx:for="{{[1,2]}}" wx:key="*this">
+      <view class="sk-img skeleton"></view>
+      <view class="sk-body">
+        <view class="sk-title skeleton"></view>
+        <view class="sk-line skeleton" style="width:60%"></view>
+        <view class="sk-tags">
+          <view class="sk-tag skeleton"></view>
+          <view class="sk-tag skeleton"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:elif="{{trips.length === 0}}" class="empty-area">
+    <view class="empty-art">
+      <view class="ea-ring"></view>
+      <view class="ea-dot ea-d1"></view>
+      <view class="ea-dot ea-d2"></view>
+    </view>
+    <text class="empty-title">开始你的第一次旅行</text>
+    <text class="empty-desc">从模板库选择目的地，或粘贴攻略链接，一分钟生成专属旅行计划</text>
+    <view class="empty-cta">
+      <button class="btn-primary" bindtap="onCreateTrip">创建旅行计划</button>
+    </view>
+    <text class="empty-link" bindtap="onAIImport">已有攻略链接？试试智能导入</text>
+  </view>
+
+  <!-- 列表 -->
+  <view wx:else class="trip-list">
+    <view wx:for="{{trips}}" wx:key="_id" class="trip-item-wrap">
+      <trip-card trip="{{item}}" bindtap="onTapTrip" bindlongpress="onLongPressTrip"/>
+    </view>
+    <view class="list-end" bindtap="onCreateTrip">+ 创建新旅行</view>
+  </view>
+
+</view>

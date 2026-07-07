@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/trip/detail/index",
+    "pages/trip/edit/index",
+    "pages/trip/budget/index",
+    "pages/trip/checklist/index",
+    "pages/trip/restaurants/index",
+    "pages/map/map/index",
+    "pages/import/index",
+    "pages/templates/list/index",
+    "pages/templates/preview/index",
+    "pages/user/settings/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#6DB58A",
+    "navigationBarTitleText": "Trippo",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FFFFFF"
+  },
+  "tabBar": {
+    "color": "#B0B0B0",
+    "selectedColor": "#6DB58A",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/templates/list/index",
+        "text": "模板库",
+        "iconPath": "images/tab-templates.png",
+        "selectedIconPath": "images/tab-templates-active.png"
+      },
+      {
+        "pagePath": "pages/user/settings/index",
+        "text": "我的",
+        "iconPath": "images/tab-user.png",
+        "selectedIconPath": "images/tab-user-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "cloud": true
+}

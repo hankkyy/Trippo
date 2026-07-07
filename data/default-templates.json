@@ -1,0 +1,74 @@
+[
+  {
+    "templateId": "tpl-tokyo-3d",
+    "title": "东京3日经典游",
+    "coverImage": "",
+    "category": "城市",
+    "meta": {
+      "destination": "东京",
+      "recommendedDays": 3,
+      "language": "zh-CN",
+      "timezone": "Asia/Tokyo",
+      "defaultLat": 35.6762,
+      "defaultLng": 139.6503
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "date": "",
+        "theme": "浅草 · 晴空塔 · 秋叶原",
+        "color": "db1",
+        "activities": [
+          { "time": "09:00", "title": "浅草寺", "subtitle": "雷门打卡", "detail": "免费参拜，推荐抽签" },
+          { "time": "12:00", "title": "晴空塔", "subtitle": "东京最高观景台", "detail": "天望甲板 2100 日元" },
+          { "time": "16:00", "title": "秋叶原", "subtitle": "电器街 & 动漫圣地", "detail": "yodobashi 免税" }
+        ]
+      },
+      {
+        "day": 2,
+        "date": "",
+        "theme": "涩谷 · 原宿 · 新宿",
+        "color": "db2",
+        "activities": [
+          { "time": "10:00", "title": "涩谷十字路口", "subtitle": "世界最繁忙路口", "detail": "Shibuya Sky 展望台" },
+          { "time": "13:00", "title": "原宿竹下通", "subtitle": "潮流购物街", "detail": "可丽饼必吃" },
+          { "time": "17:00", "title": "新宿歌舞伎町", "subtitle": "不夜城", "detail": "思い出横丁 烧鸟" }
+        ]
+      },
+      {
+        "day": 3,
+        "date": "",
+        "theme": "筑地 · 银座 · 台场",
+        "color": "db3",
+        "activities": [
+          { "time": "08:00", "title": "筑地场外市场", "subtitle": "海鲜早餐", "detail": "玉子烧 + 海鲜丼" },
+          { "time": "11:00", "title": "银座", "subtitle": "高端购物区", "detail": "伊东屋文具店值得逛" },
+          { "time": "15:00", "title": "台场", "subtitle": "彩虹大桥 + 高达", "detail": "百合海鸥号直达" }
+        ]
+      }
+    ],
+    "restaurants": [
+      { "name": "一兰拉面", "emoji": "🍜", "address": "新宿区", "price": "~1000 日元", "tags": [{ "label": "必吃", "type": "must" }], "description": "经典豚骨拉面", "recommend": "天然豚骨拉面" },
+      { "name": "筑地寿司清", "emoji": "🍣", "address": "筑地场外市场", "price": "~3000 日元", "tags": [{ "label": "本地推荐", "type": "local" }], "description": "百年寿司老店", "recommend": "おまかせ套餐" }
+    ],
+    "tips": [
+      { "title": "🌦️ 天气", "color": "#3B82F6", "body": ["四季分明", "春季赏樱/秋季红叶"] },
+      { "title": "🚇 交通", "color": "#F59E0B", "body": ["Suica/Pasmo交通卡", "地铁24/48/72小时券"] },
+      { "title": "💴 支付", "color": "#10B981", "body": ["现金仍常用", "便利店可ATM取现"] }
+    ],
+    "phrases": [
+      { "category": "问候", "localLanguage": "ありがとう", "pronunciation": "a-ri-ga-to-u", "translation": "谢谢" },
+      { "category": "点餐", "localLanguage": "おすすめは？", "pronunciation": "o-su-su-me wa", "translation": "有什么推荐？" },
+      { "category": "购物", "localLanguage": "これください", "pronunciation": "ko-re ku-da-sai", "translation": "我要这个" }
+    ],
+    "checklist": [
+      { "id": "cl-passport", "text": "护照", "category": "证件", "done": false },
+      { "id": "cl-visa", "text": "签证（确认免签政策）", "category": "证件", "done": false },
+      { "id": "cl-insurance", "text": "旅行保险", "category": "证件", "done": false },
+      { "id": "cl-suica", "text": "Suica/Pasmo卡", "category": "出行", "done": false },
+      { "id": "cl-wifi", "text": "租赁WiFi/SIM卡", "category": "出行", "done": false }
+    ],
+    "useCount": 0,
+    "isOfficial": true
+  }
+]

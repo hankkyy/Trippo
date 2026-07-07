@@ -1,0 +1,62 @@
+/* ═══════════════════════════════════════════════
+   activity-row 组件样式
+   ═══════════════════════════════════════════════ */
+
+.tl-row {
+  display: flex;
+  gap: 16rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #EDEAE2;
+  align-items: flex-start;
+  min-height: 88rpx;
+}
+
+.tl-row:last-child {
+  border-bottom: none;
+}
+
+/* ── 时间 ── */
+.tl-time {
+  min-width: 80rpx;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: right;
+  padding-top: 2rpx;
+  flex-shrink: 0;
+}
+
+/* ── 内容区 ── */
+.tl-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tl-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.tl-sub {
+  font-size: 24rpx;
+  color: var(--muted);
+  margin-top: 4rpx;
+}
+
+.tl-detail {
+  font-size: 24rpx;
+  color: var(--muted);
+  line-height: 1.6;
+  padding-top: 8rpx;
+}
+
+/* ── 地图链接 ── */
+.tl-map-link {
+  display: inline-flex; align-items: center; gap: 6rpx;
+  font-size: 24rpx; color: #8BA4B8;
+  padding: 8rpx 16rpx; border-radius: 60rpx;
+  background: rgba(139,164,184,0.08);
+  margin-top: 8rpx;
+}

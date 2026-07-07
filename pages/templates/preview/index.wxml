@@ -1,0 +1,90 @@
+<!-- ═══════════════════════════════════════════════
+  模板预览页
+  展示模板内容 +「使用此模板」一键创建
+  ═══════════════════════════════════════════════ -->
+
+<view class="page-preview">
+
+  <!-- ═══ 加载中 ═══ -->
+  <view wx:if="{{loading}}" class="pv-loading">
+    <view class="loading-spinner"></view>
+    <text>加载模板…</text>
+  </view>
+
+  <!-- ═══ 模板不存在 ═══ -->
+  <view wx:elif="{{!template}}" class="pv-error">
+    <text class="pe-icon">📋</text>
+    <text class="pe-title">模板不存在</text>
+    <text class="pe-desc">该模板可能已被移除</text>
+  </view>
+
+  <!-- ═══ 模板预览 ═══ -->
+  <block wx:else>
+    <!-- Hero -->
+    <view class="pv-hero">
+      <image class="pv-cover" src="{{template.coverImage || '/images/cover-default.jpg'}}" mode="aspectFill"/>
+      <view class="pv-hero-overlay"></view>
+      <view class="pv-hero-content">
+        <view class="pv-category">{{template.category || '通用'}}</view>
+        <view class="pv-title">{{template.title}}</view>
+        <view class="pv-meta">
+          <text wx:if="{{template.meta && template.meta.destination}}">📍 {{template.meta.destination}}</text>
+          <text wx:if="{{template.meta && template.meta.recommendedDays}}">📅 {{template.meta.recommendedDays}}天</text>
+          <text>🔥 {{template.useCount || 0}}次使用</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 内容预览 -->
+    <view class="pv-body">
+
+      <!-- 行程概览 -->
+      <view wx:if="{{template.itinerary && template.itinerary.length > 0}}" class="pv-section">
+        <view class="pv-section-title">📅 行程概览（{{template.itinerary.length}}天）</view>
+        <view wx:for="{{template.itinerary}}" wx:key="day" class="pv-day-item">
+          <view class="pv-day-num">Day {{item.day}}</view>
+          <view class="pv-day-info">
+            <view class="pv-day-theme">{{item.theme || '自由探索'}}</view>
+            <view class="pv-day-count" wx:if="{{item.activities}}">{{item.activities.length}} 个行程点</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 餐厅推荐 -->
+      <view wx:if="{{template.restaurants && template.restaurants.length > 0}}" class="pv-section">
+        <view class="pv-section-title">🍜 推荐餐厅（{{template.restaurants.length}}家）</view>
+        <view wx:for="{{template.restaurants.slice(0, 5)}}" wx:key="name" class="pv-resto-item">
+          <text>{{item.emoji || '🍽️'}} {{item.name}}</text>
+          <text class="pv-resto-price">{{item.price || ''}}</text>
+        </view>
+      </view>
+
+      <!-- 旅行贴士 -->
+      <view wx:if="{{template.tips && template.tips.length > 0}}" class="pv-section">
+        <view class="pv-section-title">💡 旅行贴士（{{template.tips.length}}条）</view>
+        <view wx:for="{{template.tips.slice(0, 3)}}" wx:key="title" class="pv-tip-item">
+          {{item.title}}
+        </view>
+      </view>
+
+      <!-- 常用语 -->
+      <view wx:if="{{template.phrases && template.phrases.length > 0}}" class="pv-section">
+        <view class="pv-section-title">🗣️ 常用语（{{template.phrases.length}}句）</view>
+      </view>
+
+      <!-- 清单 -->
+      <view wx:if="{{template.checklist && template.checklist.length > 0}}" class="pv-section">
+        <view class="pv-section-title">✅ 出发清单（{{template.checklist.length}}项）</view>
+      </view>
+
+    </view>
+  </block>
+
+  <!-- ═══ 底部「使用此模板」按钮 ═══ -->
+  <view wx:if="{{!loading && template}}" class="pv-bottom safe-bottom">
+    <button class="btn-primary pv-use-btn" bindtap="onUseTemplate" disabled="{{creating}}">
+      {{creating ? '创建中…' : '使用此模板'}}
+    </button>
+  </view>
+
+</view>

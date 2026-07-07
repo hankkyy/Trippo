@@ -1,0 +1,205 @@
+<!-- 旅行详情页 -->
+<view class="page-detail {{trip.theme ? 'theme-' + trip.theme : ''}}">
+
+  <!-- HERO -->
+  <view class="hero">
+    <swiper class="hero-swiper" autoplay circular interval="5000" duration="1500">
+      <swiper-item wx:for="{{heroImages}}" wx:key="*this">
+        <image class="hero-bg" src="{{item}}" mode="aspectFill"/>
+      </swiper-item>
+    </swiper>
+    <view class="hero-overlay"></view>
+    <view class="hero-glow"></view>
+
+    <view class="hero-content">
+      <view class="hero-badge" wx:if="{{trip.meta && trip.meta.destination}}">
+        {{trip.meta.destination}} · TRAVEL PLAN
+      </view>
+      <text class="hero-title">{{trip.title || '未命名旅行'}}</text>
+      <view class="hero-sub" wx:if="{{trip.meta}}">
+        {{trip.dateRange || ''}}
+        <text wx:if="{{trip.meta.travelers}}"> · {{trip.meta.travelers}}</text>
+      </view>
+      <view wx:if="{{trip.flights && trip.flights.enabled !== false}}" class="hero-flights">
+        <flight-card flights="{{trip.flights}}"/>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主体 -->
+  <view class="page-body">
+
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text>加载中…</text>
+    </view>
+
+    <view wx:elif="{{error}}" class="error-state">
+      <text class="error-icon">!</text>
+      <text class="error-title">加载失败</text>
+      <text class="error-desc">{{errorMsg}}</text>
+      <button class="btn-primary" bindtap="onRetry">重试</button>
+    </view>
+
+    <block wx:else>
+
+      <!-- 统计卡片 -->
+      <view class="top-cards">
+        <view class="top-card">
+          <view class="tc-ring">
+            <text class="tc-value">{{trip.itinerary ? trip.itinerary.length : 0}}</text>
+            <text class="tc-unit">天</text>
+          </view>
+          <text class="tc-label">行程天数</text>
+        </view>
+        <view class="top-card">
+          <view class="tc-ring">
+            <text class="tc-value">{{trip.meta.travelers || '—'}}</text>
+          </view>
+          <text class="tc-label">出行人</text>
+        </view>
+        <view class="top-card">
+          <view class="tc-ring">
+            <text class="tc-value">{{trip.restaurants ? trip.restaurants.length : 0}}</text>
+            <text class="tc-unit">家</text>
+          </view>
+          <text class="tc-label">餐厅推荐</text>
+        </view>
+        <view class="top-card">
+          <view class="tc-ring">
+            <text class="tc-value">{{budgetText}}</text>
+          </view>
+          <text class="tc-label">预算</text>
+        </view>
+      </view>
+
+      <!-- 倒计时 -->
+      <countdown wx:if="{{trip.meta && trip.meta.startDate}}" startDate="{{trip.meta.startDate}}" endDate="{{trip.meta.endDate}}"/>
+
+      <!-- 天气 -->
+      <weather-panel wx:if="{{trip.weather && trip.weather.enabled !== false}}" lat="{{trip.weather.lat || trip.meta.defaultLat || 39.9042}}" lng="{{trip.weather.lng || trip.meta.defaultLng || 116.4074}}"/>
+
+      <!-- 每日行程 -->
+      <view wx:if="{{trip.itinerary && trip.itinerary.length > 0}}" class="section">
+        <view class="section-header">
+          <view class="dot" style="background:#E85D3A"></view>
+          <text class="label">行程</text>
+        </view>
+        <day-card wx:for="{{trip.itinerary}}" wx:key="day" dayData="{{item}}" isToday="{{item.day === currentDay}}"/>
+      </view>
+
+      <!-- 酒店 -->
+      <view wx:if="{{trip.hotel && trip.hotel.name}}" class="section">
+        <view class="section-header">
+          <view class="dot" style="background:var(--emerald)"></view>
+          <text class="label">酒店</text>
+        </view>
+        <view class="hotel-card">
+          <view class="hc-icon">
+            <view class="hc-icon-inner"></view>
+          </view>
+          <view class="hc-info">
+            <text class="hc-name">{{trip.hotel.name}}</text>
+            <text class="hc-addr">{{trip.hotel.address}}</text>
+            <view wx:if="{{trip.hotel.tags && trip.hotel.tags.length > 0}}" class="hc-tags">
+              <text wx:for="{{trip.hotel.tags}}" wx:key="*this" class="tag tag-local">{{item}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 贴士 -->
+      <view wx:if="{{trip.tips && trip.tips.length > 0}}" class="section">
+        <view class="section-header">
+          <view class="dot" style="background:#DC2626"></view>
+          <text class="label">旅行贴士</text>
+        </view>
+        <view class="tips-grid">
+          <tip-card wx:for="{{trip.tips}}" wx:key="title" tip="{{item}}" index="{{index}}"/>
+        </view>
+      </view>
+
+      <!-- 常用语 -->
+      <view wx:if="{{trip.phrases && trip.phrases.length > 0}}" class="section">
+        <view class="section-header">
+          <view class="dot" style="background:var(--gold)"></view>
+          <text class="label">当地语言</text>
+        </view>
+        <view class="phrase-table-wrap">
+          <view wx:for="{{trip.phrases}}" wx:key="*this" class="phrase-row">
+            <text class="pr-zh">{{item.translation || item.chinese || ''}}</text>
+            <text class="pr-local">{{item.localLanguage || ''}}</text>
+            <text class="pr-pron">{{item.pronunciation || ''}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 伴手礼 -->
+      <view wx:if="{{trip.souvenirs && trip.souvenirs.length > 0}}" class="section">
+        <view class="section-header">
+          <view class="dot" style="background:#F59E0B"></view>
+          <text class="label">伴手礼</text>
+        </view>
+        <view class="souv-grid">
+          <view wx:for="{{trip.souvenirs}}" wx:key="name" class="souv-card">
+            <view class="sc-icon"></view>
+            <view class="sc-info">
+              <text class="sc-name">{{item.name}}</text>
+              <text class="sc-meta">{{item.where}} · {{item.price}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 快捷导航 -->
+      <view class="section">
+        <view class="section-header">
+          <view class="dot" style="background:var(--emerald)"></view>
+          <text class="label">快捷入口</text>
+        </view>
+        <view class="quick-nav">
+          <view wx:for="{{quickNav}}" wx:key="id" class="qn-item" bindtap="onNavigate" data-url="{{item.url}}">
+            <view class="qn-icon-wrap">
+              <view class="qn-icon-line {{item.id}}"></view>
+            </view>
+            <text class="qn-label">{{item.label}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 餐厅预览 -->
+      <view wx:if="{{trip.restaurants && trip.restaurants.length > 0}}" class="section">
+        <view class="section-header">
+          <view class="dot" style="background:#E11D48"></view>
+          <text class="label">推荐餐厅 · {{previewRestos.length}}家</text>
+          <text wx:if="{{trip.restaurants.length > 4}}" class="see-all" bindtap="onNavigate" data-url="/pages/trip/restaurants/index?tripId={{trip.tripId}}">全部 →</text>
+        </view>
+        <view wx:for="{{previewRestos}}" wx:key="name" class="resto-preview">
+          <view class="rp-icon">
+            <view class="rp-icon-dot"></view>
+          </view>
+          <view class="rp-info">
+            <view class="rp-name">{{item.name}}</view>
+            <view class="rp-addr">{{item.address}} · {{item.price}}</view>
+            <view wx:if="{{item.tags && item.tags.length > 0}}" class="rp-tags">
+              <text wx:for="{{item.tags}}" wx:key="label" wx:for-item="tag" class="tag {{tag.type === 'mich' ? 'tag-michelin' : tag.type === 'bib' ? 'tag-bib' : 'tag-local'}}">{{tag.label}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+    </block>
+  </view>
+
+  <!-- 底部操作 -->
+  <view wx:if="{{!loading && !error && isOwner}}" class="bottom-bar safe-bottom">
+    <button class="bb-btn bb-edit" bindtap="onEdit">编辑旅行</button>
+    <button class="bb-btn bb-share" open-type="share">分享给朋友</button>
+    <button class="bb-btn bb-public" bindtap="onTogglePublic">{{trip.isPublic ? '设为私密' : '设为公开'}}</button>
+  </view>
+
+  <view wx:if="{{!loading && !error && !isOwner}}" class="bottom-bar safe-bottom">
+    <button class="btn-primary" style="flex:1;" bindtap="onCreateMyOwn">我也要创建</button>
+  </view>
+
+</view>

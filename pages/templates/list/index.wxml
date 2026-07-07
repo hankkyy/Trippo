@@ -1,0 +1,63 @@
+<!-- ═══════════════════════════════════════════════
+  模板库列表页
+  分类 tab 筛选 + 卡片网格
+  ═══════════════════════════════════════════════ -->
+
+<view class="page-templates">
+
+  <!-- ═══ 分类 Tab ═══ -->
+  <scroll-view scroll-x class="category-tabs" enable-flex>
+    <view
+      wx:for="{{categories}}"
+      wx:key="value"
+      class="ct-tab {{activeCategory === item.value ? 'active' : ''}}"
+      bindtap="onSwitchCategory"
+      data-value="{{item.value}}"
+    >{{item.label}}</view>
+  </scroll-view>
+
+  <!-- ═══ 加载中 ═══ -->
+  <view wx:if="{{loading}}" class="tg-loading">
+    <view class="loading-spinner"></view>
+    <text>加载模板库…</text>
+  </view>
+
+  <!-- ═══ 空状态 ═══ -->
+  <view wx:elif="{{templates.length === 0}}" class="empty-state">
+    <text class="empty-icon">📋</text>
+    <text class="empty-title">暂无模板</text>
+    <text class="empty-desc">模板库正在建设中，敬请期待</text>
+  </view>
+
+  <!-- ═══ 模板卡片网格 ═══ -->
+  <view wx:else class="tpl-grid">
+    <view
+      wx:for="{{templates}}"
+      wx:key="templateId"
+      class="tpl-card"
+      bindtap="onTapTemplate"
+      data-template="{{item}}"
+      hover-class="tpl-card-hover"
+    >
+      <!-- 封面图 -->
+      <image
+        class="tpl-cover"
+        src="{{item.coverImage || '/images/cover-default.jpg'}}"
+        mode="aspectFill"
+        lazy-load
+      />
+
+      <!-- 内容 -->
+      <view class="tpl-content">
+        <view class="tpl-category-tag">{{item.category || '通用'}}</view>
+        <view class="tpl-title">{{item.title || '未命名模板'}}</view>
+        <view class="tpl-meta">
+          <text wx:if="{{item.meta && item.meta.destination}}">📍 {{item.meta.destination}}</text>
+          <text wx:if="{{item.meta && item.meta.recommendedDays}}">📅 {{item.meta.recommendedDays}}天</text>
+          <text>🔥 {{item.useCount || 0}}次使用</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

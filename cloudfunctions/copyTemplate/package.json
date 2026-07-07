@@ -1,0 +1,9 @@
+{
+  "name": "copyTemplate",
+  "version": "1.0.0",
+  "description": "从模板复制创建旅行",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

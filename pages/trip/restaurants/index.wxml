@@ -1,0 +1,122 @@
+<!-- ═══════════════════════════════════════════════
+  餐厅编辑器 — 添加/编辑/删除餐厅
+  注意：WXML 不支持 .indexOf() 等 JS 方法，
+  标签选中状态通过 tagOptions[].active 预计算
+  ═══════════════════════════════════════════════ -->
+
+<view class="page-restos">
+
+  <view wx:if="{{loading}}" class="detail-loading">
+    <view class="loading-spinner"></view>
+    <text>加载餐厅数据…</text>
+  </view>
+
+  <view wx:elif="{{error}}" class="detail-error">
+    <text class="de-icon">😔</text>
+    <text class="de-title">加载失败</text>
+    <text class="de-desc">{{errorMsg}}</text>
+  </view>
+
+  <block wx:else>
+
+    <view class="resto-list">
+      <view
+        wx:for="{{restaurants}}"
+        wx:key="name"
+        class="resto-card"
+        bindtap="onShowForm"
+        data-index="{{index}}"
+      >
+        <view class="rc-emoji">{{item.emoji || '🍽️'}}</view>
+        <view class="rc-info">
+          <text class="rc-name">{{item.name}}</text>
+          <text class="rc-meta">{{item.address}}{{item.price ? ' · ' + item.price : ''}}</text>
+          <view wx:if="{{item.tags && item.tags.length > 0}}" class="rc-tags">
+            <text
+              wx:for="{{item.tags}}"
+              wx:key="label"
+              wx:for-item="tag"
+              class="tag {{tag.type === 'mich' ? 'tag-michelin' : tag.type === 'bib' ? 'tag-bib' : 'tag-local'}}"
+            >{{tag.label}}</text>
+          </view>
+        </view>
+        <view class="rc-arrow">›</view>
+      </view>
+
+      <view wx:if="{{restaurants.length === 0}}" class="empty-restos">
+        <text class="empty-icon">🍜</text>
+        <text class="empty-text">还没有添加餐厅</text>
+        <text class="empty-hint">点击下方按钮添加推荐餐厅</text>
+      </view>
+    </view>
+
+  </block>
+
+  <view wx:if="{{!loading && !error}}" class="bottom-add-bar safe-bottom">
+    <button class="btn-add" bindtap="onShowForm">
+      + 添加餐厅
+    </button>
+  </view>
+
+  <!-- 编辑表单弹窗 -->
+  <view wx:if="{{showForm}}" class="form-overlay" bindtap="onHideForm">
+    <view class="form-panel" catchtap="">
+      <view class="form-title">{{editingIndex >= 0 ? '编辑餐厅' : '添加餐厅'}}</view>
+
+      <view class="form-group">
+        <text class="form-label">餐厅名称 *</text>
+        <input class="form-input" placeholder="如：Phở Gia Truyền" value="{{formName}}" bindinput="onNameInput" maxlength="50"/>
+      </view>
+
+      <view class="form-row">
+        <view class="form-group" style="flex:2;">
+          <text class="form-label">Emoji</text>
+          <input class="form-input" placeholder="🍽️" value="{{formEmoji}}" bindinput="onEmojiInput" maxlength="4"/>
+        </view>
+        <view class="form-group" style="flex:2;">
+          <text class="form-label">人均价格</text>
+          <input class="form-input" placeholder="如：50k-80k VND" value="{{formPrice}}" bindinput="onPriceInput"/>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">地址</text>
+        <input class="form-input" placeholder="如：49 Bát Đàn, Hoàn Kiếm" value="{{formAddress}}" bindinput="onAddressInput"/>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">标签</text>
+        <view class="tag-selector">
+          <view
+            wx:for="{{tagOptions}}"
+            wx:key="value"
+            class="tag-chip {{item.active ? 'selected' : ''}}"
+            data-tag="{{item.label}}"
+            bindtap="onTagToggle"
+          >{{item.label}}</view>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">必点推荐</text>
+        <input class="form-input" placeholder="如：Phở Bò Tái Chín" value="{{formRecommend}}" bindinput="onRecommendInput"/>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">描述</text>
+        <textarea class="form-textarea" placeholder="餐厅特色、排队情况…" value="{{formDesc}}" bindinput="onDescInput" maxlength="200"/>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">Google Maps 链接</text>
+        <input class="form-input" placeholder="https://maps.google.com/..." value="{{formMapUrl}}" bindinput="onMapUrlInput"/>
+      </view>
+
+      <view class="form-actions">
+        <button class="btn-cancel" bindtap="onHideForm">取消</button>
+        <button class="btn-save" bindtap="onSave">保存</button>
+      </view>
+    </view>
+  </view>
+
+</view>

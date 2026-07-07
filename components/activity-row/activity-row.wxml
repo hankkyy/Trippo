@@ -1,0 +1,23 @@
+<!-- ═══════════════════════════════════════════════
+  activity-row 组件 — 行程活动行
+  时间 · 标题 · 副标题 · 详情 · 地图链接
+  ═══════════════════════════════════════════════ -->
+
+<view class="tl-row">
+  <!-- 时间 -->
+  <view class="tl-time">{{activity.time || '--:--'}}</view>
+
+  <!-- 内容 -->
+  <view class="tl-info">
+    <view class="tl-title">{{activity.title || '未命名活动'}}</view>
+    <view wx:if="{{activity.subtitle}}" class="tl-sub">{{activity.subtitle}}</view>
+
+    <!-- 详情 & 地图链接 -->
+    <view wx:if="{{activity.detail || activity.mapUrl}}" class="tl-detail">
+      <text wx:if="{{activity.detail}}">{{activity.detail}}</text>
+      <view wx:if="{{activity.mapUrl}}" class="tl-map-link" bindtap="onOpenMap">
+        查看地图
+      </view>
+    </view>
+  </view>
+</view>

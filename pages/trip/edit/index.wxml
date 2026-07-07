@@ -1,0 +1,157 @@
+<!-- 编辑旅行 -->
+<view class="page-edit">
+
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中…</text>
+  </view>
+
+  <block wx:else>
+    <scroll-view scroll-y class="edit-scroll" enhanced show-scrollbar="{{false}}">
+
+      <!-- 基本信息 -->
+      <view class="fs-card {{openSection === 'basic' ? 'fs-open' : ''}}">
+        <view class="fs-header" bindtap="onToggleSection" data-key="basic">
+          <view class="fs-header-left">
+            <view class="fs-dot {{sectionState.basic ? 'done' : ''}}"></view>
+            <text class="fs-label">基本信息</text>
+          </view>
+          <view class="fs-header-right">
+            <text wx:if="{{sectionState.basic}}" class="fs-done-badge">Done</text>
+            <text class="fs-arrow {{openSection === 'basic' ? 'open' : ''}}"></text>
+          </view>
+        </view>
+
+        <view wx:if="{{openSection === 'basic'}}" class="fs-body">
+          <view class="fg-item">
+            <text class="fg-label">封面图 URL</text>
+            <input class="fg-input" placeholder="输入图片链接（可选）" value="{{form.coverImage}}" bindinput="onFieldInput" data-field="coverImage"/>
+          </view>
+          <view class="fg-item">
+            <text class="fg-label required">旅行标题</text>
+            <input class="fg-input" placeholder="东京3日经典游" value="{{form.title}}" bindinput="onFieldInput" data-field="title"/>
+          </view>
+          <view class="fg-item">
+            <text class="fg-label">目的地</text>
+            <input class="fg-input" placeholder="东京" value="{{form.meta.destination}}" bindinput="onMetaInput" data-field="destination"/>
+          </view>
+          <view class="fg-item">
+            <text class="fg-label">出行人</text>
+            <input class="fg-input" placeholder="子豪 & 小轰轰" value="{{form.meta.travelers}}" bindinput="onMetaInput" data-field="travelers"/>
+          </view>
+          <view class="fg-row">
+            <view class="fg-item fg-half">
+              <text class="fg-label required">出发日期</text>
+              <picker mode="date" value="{{form.meta.startDate}}" bindchange="onDateChange" data-field="startDate">
+                <view class="fg-picker {{form.meta.startDate ? '' : 'placeholder'}}">{{form.meta.startDate || '选择日期'}}</view>
+              </picker>
+            </view>
+            <view class="fg-item fg-half">
+              <text class="fg-label">结束日期</text>
+              <picker mode="date" value="{{form.meta.endDate}}" bindchange="onDateChange" data-field="endDate">
+                <view class="fg-picker {{form.meta.endDate ? '' : 'placeholder'}}">{{form.meta.endDate || '选择日期'}}</view>
+              </picker>
+            </view>
+          </view>
+          <view class="fg-item">
+            <text class="fg-label">主题配色</text>
+            <view class="theme-picker">
+              <view wx:for="{{themes}}" wx:key="value"
+                class="theme-chip {{form.theme === item.value ? 'active' : ''}}"
+                bindtap="onSelectTheme" data-value="{{item.value}}">
+                <view class="tc-dot" style="background:{{item.swatch}}"></view>
+                <text>{{item.label}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 航班 -->
+      <view class="fs-card {{openSection === 'flights' ? 'fs-open' : ''}}">
+        <view class="fs-header" bindtap="onToggleSection" data-key="flights">
+          <view class="fs-header-left">
+            <view class="fs-dot {{sectionState.flights ? 'done' : ''}} flight"></view>
+            <text class="fs-label">航班信息</text>
+          </view>
+          <view class="fs-header-right">
+            <text wx:if="{{sectionState.flights}}" class="fs-done-badge">Done</text>
+            <text class="fs-arrow {{openSection === 'flights' ? 'open' : ''}}"></text>
+          </view>
+        </view>
+        <view wx:if="{{openSection === 'flights'}}" class="fs-body">
+          <view class="fs-subheader">去程</view>
+          <block wx:for="{{flightFields}}" wx:key="key">
+            <view class="fg-item" wx:if="{{item.section === 'outbound'}}">
+              <text class="fg-label">{{item.label}}</text>
+              <input class="fg-input" placeholder="{{item.placeholder}}" value="{{form.flights.outbound[item.key] || ''}}" bindinput="onFlightInput" data-section="outbound" data-field="{{item.key}}"/>
+            </view>
+          </block>
+          <view class="fs-subheader" style="margin-top:32rpx;">回程</view>
+          <block wx:for="{{flightFields}}" wx:key="key">
+            <view class="fg-item" wx:if="{{item.section === 'inbound'}}">
+              <text class="fg-label">{{item.label}}</text>
+              <input class="fg-input" placeholder="{{item.placeholder}}" value="{{form.flights.inbound[item.key] || ''}}" bindinput="onFlightInput" data-section="inbound" data-field="{{item.key}}"/>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <!-- 酒店 -->
+      <view class="fs-card {{openSection === 'hotel' ? 'fs-open' : ''}}">
+        <view class="fs-header" bindtap="onToggleSection" data-key="hotel">
+          <view class="fs-header-left">
+            <view class="fs-dot {{sectionState.hotel ? 'done' : ''}} hotel"></view>
+            <text class="fs-label">酒店</text>
+          </view>
+          <view class="fs-header-right">
+            <text wx:if="{{sectionState.hotel}}" class="fs-done-badge">Done</text>
+            <text class="fs-arrow {{openSection === 'hotel' ? 'open' : ''}}"></text>
+          </view>
+        </view>
+        <view wx:if="{{openSection === 'hotel'}}" class="fs-body">
+          <block wx:for="{{hotelFields}}" wx:key="key">
+            <view class="fg-item">
+              <text class="fg-label">{{item.label}}</text>
+              <input class="fg-input" placeholder="{{item.placeholder}}" value="{{form.hotel[item.key] || ''}}" bindinput="onHotelInput" data-field="{{item.key}}"/>
+            </view>
+          </block>
+        </view>
+      </view>
+
+      <!-- 预算 -->
+      <view class="fs-card {{openSection === 'budget' ? 'fs-open' : ''}}">
+        <view class="fs-header" bindtap="onToggleSection" data-key="budget">
+          <view class="fs-header-left">
+            <view class="fs-dot {{sectionState.budget ? 'done' : ''}} budget"></view>
+            <text class="fs-label">预算</text>
+          </view>
+          <view class="fs-header-right">
+            <text wx:if="{{sectionState.budget}}" class="fs-done-badge">Done</text>
+            <text class="fs-arrow {{openSection === 'budget' ? 'open' : ''}}"></text>
+          </view>
+        </view>
+        <view wx:if="{{openSection === 'budget'}}" class="fs-body">
+          <view class="fg-item">
+            <text class="fg-label">人均预算</text>
+            <view class="fg-input-with-unit">
+              <text class="fg-unit">¥</text>
+              <input class="fg-input-unit" type="digit" placeholder="5000" value="{{form.budget.totalBudget ? '' + form.budget.totalBudget : ''}}" bindinput="onBudgetInput"/>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view style="height:180rpx;"></view>
+    </scroll-view>
+
+    <!-- 底部 -->
+    <view class="edit-bottom safe-bottom">
+      <button wx:if="{{isEdit}}" class="btn-danger" style="flex:0 0 auto;padding:24rpx 36rpx;" bindtap="onDelete">删除</button>
+      <button class="btn-primary" style="flex:1;" bindtap="onSave" disabled="{{saving}}">
+        {{saving ? '保存中…' : (isEdit ? '保存修改' : '创建旅行计划')}}
+      </button>
+    </view>
+  </block>
+
+</view>

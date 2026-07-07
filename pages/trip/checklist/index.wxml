@@ -1,0 +1,72 @@
+<!-- ═══════════════════════════════════════════════
+  出发清单 — 分类勾选 + 进度条
+  ═══════════════════════════════════════════════ -->
+
+<view class="page-checklist">
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="detail-loading">
+    <view class="loading-spinner"></view>
+    <text>加载清单…</text>
+  </view>
+
+  <!-- 加载失败 -->
+  <view wx:elif="{{error}}" class="detail-error">
+    <text class="de-title">加载失败</text>
+    <text class="de-desc">{{errorMsg}}</text>
+  </view>
+
+  <!-- 主体 -->
+  <block wx:else>
+
+    <!-- 进度头部 -->
+    <view class="progress-header">
+      <view class="ph-stats">
+        <text class="ph-count">{{doneItems}}/{{totalItems}} 已完成</text>
+        <text class="ph-pct">{{progressPct}}%</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{progressPct}}%"></view>
+      </view>
+
+      <!-- 空状态 -->
+      <view wx:if="{{totalItems === 0}}" class="empty-checklist">
+        <view class="cl-empty-ring"></view>
+        <text class="empty-text">还没有清单项</text>
+        <text class="empty-hint">在编辑旅行中添加出发清单</text>
+      </view>
+    </view>
+
+    <!-- 分类清单 -->
+    <view class="checklist-body" wx:if="{{totalItems > 0}}">
+      <block wx:for="{{groupedItems}}" wx:key="category" wx:for-item="group" wx:for-index="catIdx">
+        <!-- 分类标题 -->
+        <view class="cat-header">
+          <text class="cat-name">{{group.category}}</text>
+          <text class="cat-progress">{{group.doneCount}}/{{group.totalCount}}</text>
+        </view>
+
+        <!-- 清单项 -->
+        <view
+          wx:for="{{group.items}}"
+          wx:key="id"
+          wx:for-item="item"
+          wx:for-index="itemIdx"
+          class="cl-item {{item.done ? 'done' : ''}}"
+          bindtap="onToggle"
+          data-cat-index="{{catIdx}}"
+          data-item-index="{{itemIdx}}"
+        >
+          <view class="cl-checkbox {{item.done ? 'checked' : ''}}">
+            <text wx:if="{{item.done}}">✓</text>
+          </view>
+          <view class="cl-content">
+            <text class="cl-text">{{item.text}}</text>
+            <text wx:if="{{item.description}}" class="cl-desc">{{item.description}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+  </block>
+</view>

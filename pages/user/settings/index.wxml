@@ -1,0 +1,84 @@
+<!-- ═══════════════════════════════════════════════
+  设置页（「我的」Tab）
+  ═══════════════════════════════════════════════ -->
+
+<view class="page-settings">
+
+  <!-- 用户头像区域 -->
+  <view class="user-header">
+    <view class="avatar-wrap">
+      <image wx:if="{{userInfo && userInfo.avatarUrl}}" class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"/>
+      <view wx:else class="avatar-placeholder">🧳</view>
+    </view>
+    <text class="user-name">{{userInfo ? userInfo.nickName : '旅行者'}}</text>
+    <text class="user-sub">用 Trippo 记录每一次旅行</text>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-row">
+    <view class="stat-card">
+      <text class="stat-num">{{tripCount}}</text>
+      <text class="stat-label">旅行计划</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-num">{{totalDays}}</text>
+      <text class="stat-label">行程天数</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-num">{{totalRestos}}</text>
+      <text class="stat-label">推荐餐厅</text>
+    </view>
+  </view>
+
+  <!-- 主题切换 -->
+  <view class="section-card">
+    <view class="section-label">🎨 配色主题</view>
+    <view class="theme-list">
+      <view
+        wx:for="{{themes}}"
+        wx:key="name"
+        class="theme-item {{currentTheme === item.name ? 'active' : ''}}"
+        bindtap="onThemeChange"
+        data-theme="{{item.name}}"
+      >
+        <view class="theme-dot" style="background: {{item.gold}}"></view>
+        <view class="theme-dot" style="background: {{item.emerald}}"></view>
+        <text class="theme-name">{{item.label}}</text>
+        <text wx:if="{{currentTheme === item.name}}" class="theme-check">✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 工具 -->
+  <view class="section-card">
+    <view class="section-label">⚙️ 工具</view>
+    <view class="menu-item" bindtap="onClearCache">
+      <text>🗑️ 清除本地缓存</text>
+      <text class="menu-hint">{{cacheSize}}</text>
+    </view>
+    <view class="menu-item" bindtap="onCopyEnvId">
+      <text>☁️ 复制 CloudBase 环境 ID</text>
+      <text class="menu-hint">点击复制</text>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="section-card">
+    <view class="section-label">ℹ️ 关于</view>
+    <view class="menu-item">
+      <text>版本号</text>
+      <text class="menu-hint">v{{version}}</text>
+    </view>
+    <view class="menu-item" bindtap="onOpenRepo">
+      <text>GitHub 开源地址</text>
+      <text class="menu-hint">👉 查看源码</text>
+    </view>
+  </view>
+
+  <!-- 底部 -->
+  <view class="settings-footer">
+    <text>Trippo — 让旅行分享更优雅</text>
+    <text class="footer-sub">Made with ❤️ for travelers</text>
+  </view>
+
+</view>

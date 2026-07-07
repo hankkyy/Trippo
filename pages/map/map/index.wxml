@@ -1,0 +1,70 @@
+<!-- ═══════════════════════════════════════════════
+  地图页 — 微信原生 <map> + 分类筛选 + popup
+  ═══════════════════════════════════════════════ -->
+
+<view class="map-page">
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="map-loading">
+    <view class="loading-spinner"></view>
+    <text>加载地图数据…</text>
+  </view>
+
+  <!-- 加载失败 -->
+  <view wx:elif="{{error}}" class="map-error">
+    <text class="me-icon">😔</text>
+    <text class="me-title">加载失败</text>
+    <text class="me-desc">{{errorMsg}}</text>
+  </view>
+
+  <!-- 地图主体 -->
+  <block wx:else>
+    <map
+      id="trippoMap"
+      class="trip-map"
+      latitude="{{latitude}}"
+      longitude="{{longitude}}"
+      scale="{{scale}}"
+      markers="{{markers}}"
+      show-location="{{true}}"
+      bindmarkertap="onMarkerTap"
+      bindtap="onMapTap"
+    />
+
+    <!-- 分类筛选栏 -->
+    <cover-view class="filter-bar" wx:if="{{categories.length > 0}}">
+      <cover-view class="filter-scroll">
+        <cover-view
+          class="filter-chip {{activeCategory === '' ? 'active' : ''}}"
+          data-cat=""
+          bindtap="onFilter"
+        >全部</cover-view>
+        <cover-view
+          wx:for="{{categories}}"
+          wx:key="id"
+          class="filter-chip {{activeCategory === item.id ? 'active' : ''}}"
+          data-cat="{{item.id}}"
+          bindtap="onFilter"
+        >{{item.label}}</cover-view>
+      </cover-view>
+    </cover-view>
+
+    <!-- 底部 popup -->
+    <cover-view class="map-popup {{showPopup ? 'show' : ''}}" wx:if="{{showPopup}}">
+      <cover-view class="popup-header">
+        <cover-view class="popup-emoji">{{popupData.emoji}}</cover-view>
+        <cover-view class="popup-title">{{popupData.name}}</cover-view>
+        <cover-view class="popup-close" bindtap="onClosePopup">✕</cover-view>
+      </cover-view>
+      <cover-view class="popup-desc" wx:if="{{popupData.desc}}">{{popupData.desc}}</cover-view>
+      <cover-view class="popup-actions">
+        <cover-view class="popup-btn" bindtap="onOpenLocation">🧭 导航到这里</cover-view>
+      </cover-view>
+    </cover-view>
+
+    <!-- 图例提示 -->
+    <cover-view class="map-legend" wx:if="{{!showPopup}}">
+      <cover-view class="legend-text">👆 点击标注查看详情</cover-view>
+    </cover-view>
+  </block>
+</view>

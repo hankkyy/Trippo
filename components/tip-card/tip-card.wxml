@@ -1,0 +1,15 @@
+<!-- ═══════════════════════════════════════════════
+  tip-card — 旅行贴士卡片
+  ═══════════════════════════════════════════════ -->
+
+<view class="tip-card" style="border-left-color: {{displayColor}};">
+  <view class="tip-title">{{tip.title}}</view>
+  <view wx:if="{{tip.body && tip.body.length > 0}}" class="tip-body">
+    <view
+      wx:for="{{tip.body}}"
+      wx:key="*this"
+      wx:for-item="line"
+      class="tip-line"
+    >{{line}}</view>
+  </view>
+</view>

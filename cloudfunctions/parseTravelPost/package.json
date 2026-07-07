@@ -1,0 +1,9 @@
+{
+  "name": "parseTravelPost",
+  "version": "1.0.0",
+  "description": "AI 解析旅行攻略内容 → 结构化旅行数据",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

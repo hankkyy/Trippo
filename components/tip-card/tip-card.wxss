@@ -1,0 +1,17 @@
+/* tip-card */
+
+.tip-card {
+  position: relative; overflow: hidden;
+  background: var(--card-glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 24rpx; padding: 34rpx 30rpx;
+  border: 1rpx solid rgba(255,255,255,0.6);
+  box-shadow: var(--shadow-card);
+  border-left: 6rpx solid transparent;
+  transition: all 0.3s ease-out;
+}
+.tip-card:active { transform: translateY(-4rpx); box-shadow: var(--shadow-md); }
+.tip-title { font-weight: 800; font-size: 28rpx; color: var(--text); margin-bottom: 18rpx; display: flex; align-items: center; gap: 14rpx; }
+.tip-title::after { content: ''; flex: 1; height: 1rpx; background: linear-gradient(90deg, #E8E4DC, transparent); border-radius: 1rpx; }
+.tip-body { font-size: 26rpx; color: var(--text-secondary); line-height: 2; }
+.tip-line { padding: 8rpx 0 8rpx 26rpx; position: relative; border-radius: 6rpx; transition: all 0.2s; }
+.tip-line::before { content: '\203A'; position: absolute; left: 8rpx; top: 6rpx; font-weight: 900; font-size: 28rpx; line-height: 1; }

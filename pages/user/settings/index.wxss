@@ -1,0 +1,181 @@
+/* ═══════════════════════════════════════════════
+   设置页样式
+   ═══════════════════════════════════════════════ */
+
+.page-settings {
+  min-height: 100vh;
+  background: var(--bg);
+  padding-bottom: 60rpx;
+}
+
+/* ── 用户头像区域 ── */
+.user-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 40rpx 40rpx;
+  background: linear-gradient(180deg, var(--emerald-light) 0%, var(--bg) 100%);
+}
+
+.avatar-wrap {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: 20rpx;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  background: linear-gradient(135deg, #F0F9F4, #E8F5E9);
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.user-sub {
+  font-size: 24rpx;
+  color: var(--muted);
+  margin-top: 6rpx;
+}
+
+/* ── 统计卡片 ── */
+.stats-row {
+  display: flex;
+  gap: 16rpx;
+  padding: 0 32rpx 24rpx;
+}
+
+.stat-card {
+  flex: 1;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28rpx 16rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.03);
+}
+
+.stat-num {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 900;
+  color: var(--emerald);
+  line-height: 1;
+}
+
+.stat-label {
+  display: block;
+  font-size: 22rpx;
+  color: var(--muted);
+  margin-top: 8rpx;
+}
+
+/* ── 区块卡片 ── */
+.section-card {
+  margin: 0 32rpx 24rpx;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.03);
+}
+
+.section-label {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20rpx;
+  letter-spacing: 1rpx;
+}
+
+/* ── 主题列表 ── */
+.theme-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.theme-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx 24rpx;
+  background: #FAFAF8;
+  border-radius: var(--radius-sm);
+  border: 2rpx solid transparent;
+  transition: all 0.2s;
+}
+
+.theme-item.active {
+  border-color: var(--gold);
+  background: var(--gold-light);
+}
+
+.theme-dot {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  margin-right: -8rpx;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.12);
+}
+
+.theme-name {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.theme-check {
+  color: var(--emerald);
+  font-weight: 700;
+}
+
+/* ── 菜单项 ── */
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F3EFE5;
+  font-size: 28rpx;
+  color: var(--text);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-hint {
+  font-size: 24rpx;
+  color: var(--muted);
+}
+
+/* ── 底部 ── */
+.settings-footer {
+  text-align: center;
+  padding: 48rpx 40rpx;
+  color: var(--muted);
+  font-size: 24rpx;
+}
+
+.footer-sub {
+  display: block;
+  font-size: 22rpx;
+  opacity: 0.5;
+  margin-top: 8rpx;
+}

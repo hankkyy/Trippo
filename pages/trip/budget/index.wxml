@@ -1,0 +1,143 @@
+<!-- ═══════════════════════════════════════════════
+  记账本 — 多币种花费追踪
+  注意：WXML 不支持 .toFixed() 等 JS 方法调用，
+  所有格式化在 JS 端预计算为 displayXxx 字段
+  ═══════════════════════════════════════════════ -->
+
+<view class="page-budget">
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="detail-loading">
+    <view class="loading-spinner"></view>
+    <text>加载记账数据…</text>
+  </view>
+
+  <!-- 加载失败 -->
+  <view wx:elif="{{error}}" class="detail-error">
+    <text class="de-title">加载失败</text>
+    <text class="de-desc">{{errorMsg}}</text>
+  </view>
+
+  <!-- 主体 -->
+  <block wx:else>
+
+    <!-- 汇总卡片 -->
+    <view class="summary-card">
+      <view class="sum-row main">
+        <text class="sum-label">人均总花费</text>
+        <text class="sum-value">¥{{totalPerPerson}}</text>
+      </view>
+
+      <block wx:if="{{totalBudget > 0}}">
+        <view class="sum-row">
+          <text class="sum-label">预算（人均）</text>
+          <text class="sum-value sub">¥{{totalBudget}}</text>
+        </view>
+        <view class="sum-row diff">
+          <text class="sum-label">{{isOverBudget ? '⚠️ 已超支' : '✅ 剩余预算'}}</text>
+          <text class="sum-value {{isOverBudget ? 'over' : 'safe'}}">¥{{budgetDiff}}</text>
+        </view>
+        <view class="progress-bar">
+          <view class="progress-fill {{isOverBudget ? 'over' : ''}}" style="width: {{budgetPct}}%"></view>
+        </view>
+        <text class="progress-label">已用 {{budgetPct}}%</text>
+      </block>
+
+      <view class="sum-meta">
+        <text>{{expenses.length}} 笔记录</text>
+        <text wx:if="{{displayCurrencies}}">{{displayCurrencies}}</text>
+      </view>
+    </view>
+
+    <!-- 花费列表 -->
+    <view class="expense-list">
+      <view
+        wx:for="{{expenses}}"
+        wx:key="createdAt"
+        class="expense-item"
+        bindtap="onShowForm"
+        data-index="{{index}}"
+      >
+        <view class="ei-left">
+          <text class="ei-desc">{{item.desc}}</text>
+          <text class="ei-meta">{{item.displayAmount}} · {{item.displaySplit}}</text>
+        </view>
+        <view class="ei-right">
+          <text class="ei-rmb">{{item.displayRmb}}</text>
+          <view class="ei-delete" catchtap="onDeleteConfirm" data-index="{{index}}">✕</view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view wx:if="{{expenses.length === 0}}" class="empty-expenses">
+        <view class="empty-ring"></view>
+        <text class="empty-text">还没有花费记录</text>
+        <text class="empty-hint">点击下方按钮添加第一笔</text>
+      </view>
+    </view>
+
+  </block>
+
+  <!-- 添加按钮（固定底部） -->
+  <view wx:if="{{!loading && !error}}" class="bottom-add-bar safe-bottom">
+    <button class="btn-add" bindtap="onShowForm" wx:if="{{!showForm}}">
+      + 添加一笔花费
+    </button>
+  </view>
+
+  <!-- ═══ 添加/编辑表单弹窗 ═══ -->
+  <view wx:if="{{showForm}}" class="form-overlay" bindtap="onHideForm">
+    <view class="form-panel" catchtap="">
+      <view class="form-title">{{editingIndex >= 0 ? '编辑花费' : '添加花费'}}</view>
+
+      <view class="form-group">
+        <text class="form-label">描述</text>
+        <input class="form-input" placeholder="如：午餐 Phở Thìn" value="{{formDesc}}" bindinput="onDescInput" maxlength="40"/>
+      </view>
+
+      <view class="form-row">
+        <view class="form-group" style="flex:2;">
+          <text class="form-label">金额</text>
+          <input class="form-input" type="digit" placeholder="0" value="{{formAmount}}" bindinput="onAmountInput"/>
+        </view>
+        <view class="form-group" style="flex:1;">
+          <text class="form-label">币种</text>
+          <picker mode="selector" range="{{currencies}}" value="{{currencyIndex}}" bindchange="onCurrencyChange">
+            <view class="form-picker">{{formCurrency}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">分摊方式</text>
+        <view class="split-toggle">
+          <view class="split-btn {{formSplitType === 'perPerson' ? 'active' : ''}}" data-type="perPerson" bindtap="onSplitTypeChange">人均</view>
+          <view class="split-btn {{formSplitType === 'total' ? 'active' : ''}}" data-type="total" bindtap="onSplitTypeChange">总共</view>
+          <view wx:if="{{formSplitType === 'total'}}" class="people-input">
+            <text>×</text>
+            <input type="number" value="{{formPeople}}" bindinput="onPeopleChange" min="1" max="20"/>
+            <text>人</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-actions">
+        <button class="btn-cancel" bindtap="onHideForm">取消</button>
+        <button class="btn-save" bindtap="onSave">保存</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- ═══ 删除确认弹窗 ═══ -->
+  <view wx:if="{{showDeleteConfirm}}" class="form-overlay" bindtap="onCancelDelete">
+    <view class="confirm-dialog" catchtap="">
+      <text class="confirm-title">确认删除？</text>
+      <text class="confirm-desc">删除后无法恢复</text>
+      <view class="confirm-actions">
+        <button class="btn-cancel" bindtap="onCancelDelete">取消</button>
+        <button class="btn-delete" bindtap="onConfirmDelete">删除</button>
+      </view>
+    </view>
+  </view>
+
+</view>

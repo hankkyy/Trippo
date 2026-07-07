@@ -1,0 +1,9 @@
+{
+  "name": "getPublicTrip",
+  "version": "1.0.0",
+  "description": "读取公开旅行数据（绕过 _openid 限制）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

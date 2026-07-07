@@ -1,0 +1,94 @@
+<!-- ═══════════════════════════════════════════════
+  flight-card 组件 — 登机牌风格航班卡
+  参照 hanoi-vercel 模板完整移植
+  支持去程/回程 tab 切换、点击展开额外信息
+  ═══════════════════════════════════════════════ -->
+
+<view class="flight-card-wrapper">
+  <!-- ═══ Tab 切换栏 ═══ -->
+  <view wx:if="{{hasBoth}}" class="fc-tabs">
+    <view
+      class="fc-tab {{activeTab === 'outbound' ? 'active' : ''}}"
+      bindtap="onSwitchTab"
+      data-tab="outbound"
+    >🛫 去程</view>
+    <view
+      class="fc-tab {{activeTab === 'inbound' ? 'active' : ''}}"
+      bindtap="onSwitchTab"
+      data-tab="inbound"
+    >🛬 回程</view>
+  </view>
+
+  <!-- ═══ 登机牌卡片 ═══ -->
+  <view
+    class="flight-card {{tapped ? 'tapped' : ''}}"
+    bindtap="onToggle"
+    wx:if="{{currentFlight}}"
+  >
+
+    <!-- 顶部深色条 -->
+    <view class="bp-header">
+      <text class="bp-label">{{activeTab === 'outbound' ? '去程 · OUTBOUND' : '回程 · INBOUND'}}</text>
+      <view class="bp-plane-icon"></view>
+    </view>
+
+    <!-- 主体：起降站 + 路线 -->
+    <view class="bp-body">
+      <!-- 出发站 -->
+      <view class="bp-station">
+        <view class="bp-code">{{currentFlight.depCode || '---'}}</view>
+        <view class="bp-city">{{currentFlight.depAirport || ''}}</view>
+        <view class="bp-time">{{currentFlight.depTime || '--:--'}}</view>
+        <view class="bp-date" wx:if="{{currentFlight.depDate}}">{{currentFlight.depDate}}</view>
+      </view>
+
+      <!-- 路线中心 -->
+      <view class="bp-route">
+        <view class="bp-route-visual">
+          <view class="bp-dot"></view>
+          <view class="bp-dash"></view>
+          <view class="bp-plane-icon-sm"></view>
+          <view class="bp-dash"></view>
+          <view class="bp-dot"></view>
+        </view>
+        <view class="bp-flight-no">{{currentFlight.flightNo || ''}}</view>
+        <view class="bp-dur" wx:if="{{currentFlight.duration}}">{{currentFlight.duration}}</view>
+      </view>
+
+      <!-- 到达站 -->
+      <view class="bp-station">
+        <view class="bp-code arr">{{currentFlight.arrCode || '---'}}</view>
+        <view class="bp-city">{{currentFlight.arrAirport || ''}}</view>
+        <view class="bp-time">{{currentFlight.arrTime || '--:--'}}</view>
+        <view class="bp-date" wx:if="{{currentFlight.arrDate}}">{{currentFlight.arrDate}}</view>
+      </view>
+    </view>
+
+    <!-- 信息行 -->
+    <view class="bp-info">
+      <text>{{currentFlight.airline || ''}}</text>
+      <text>{{currentFlight.aircraft || ''}}</text>
+    </view>
+
+    <!-- 穿孔撕线 -->
+    <view class="bp-perf"></view>
+
+    <!-- 底部 -->
+    <view class="bp-footer">
+      <text>{{currentFlight.depAirport || ''}} → {{currentFlight.arrAirport || ''}}</text>
+      <text wx:if="{{currentFlight.noteShort}}">{{currentFlight.noteShort}}</text>
+    </view>
+
+    <!-- 展开额外信息 -->
+    <view class="fextra">
+      <text wx:if="{{currentFlight.note}}">{{currentFlight.note}}</text>
+    </view>
+
+  </view>
+
+  <!-- 无航班数据 -->
+  <view wx:else class="flight-empty">
+    <view class="fe-ring"></view>
+    <text class="fe-text">尚未填写航班信息</text>
+  </view>
+</view>
