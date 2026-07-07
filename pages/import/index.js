@@ -5,9 +5,29 @@
 
 const api = require('../../utils/api');
 
-const DEEPSEEK_KEY = 'YOUR_DEEPSEEK_API_KEY';
 const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
 const FETCH_PROXY = 'https://hankzhang.cloud/api/fetch-url';
+
+// API Key 从 CloudBase config 集合动态读取，不在代码中硬编码
+// CloudBase 控制台 → 数据库 → config 集合 → 创建文档 { _id: 'deepseek', key: 'sk-xxx' }
+let cachedKey = null;
+async function getDeepSeekKey() {
+  if (cachedKey) return cachedKey;
+  try {
+    const cache = wx.getStorageSync('trippo_ds_key');
+    if (cache) { cachedKey = cache; return cachedKey; }
+  } catch (_) {}
+  try {
+    const db = wx.cloud.database();
+    const res = await db.collection('config').doc('deepseek').get();
+    if (res.data && res.data.key) {
+      cachedKey = res.data.key;
+      wx.setStorageSync('trippo_ds_key', cachedKey);
+      return cachedKey;
+    }
+  } catch (_) {}
+  throw new Error('API Key 未配置，请在 CloudBase 控制台 config 集合中添加');
+}
 
 function uuid() {
   const hex = '0123456789abcdef';
@@ -258,14 +278,15 @@ Page({
       .then(texts => texts.filter(t => t.length > 100));
   },
 
-  callDeepSeek(content) {
+  async callDeepSeek(content) {
+    const key = await getDeepSeekKey();
     return new Promise((resolve, reject) => {
       wx.request({
         url: DEEPSEEK_URL,
         method: 'POST',
         header: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + DEEPSEEK_KEY
+          'Authorization': 'Bearer ' + key
         },
         timeout: 60000,
         data: {

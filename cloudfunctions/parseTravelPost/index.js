@@ -8,9 +8,9 @@
 const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
-// ⚠️ 部署前替换为你的 DeepSeek API Key
-// 获取地址: https://platform.deepseek.com/api_keys
-const DEEPSEEK_API_KEY = 'YOUR_DEEPSEEK_API_KEY';
+// API Key 从 CloudBase 环境变量读取
+// CloudBase 控制台 → 云函数 → parseTravelPost → 环境变量 → DEEPSEEK_API_KEY
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || '';
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
 const DEEPSEEK_MODEL = 'deepseek-chat';
 
